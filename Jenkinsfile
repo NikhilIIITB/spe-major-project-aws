@@ -5,8 +5,8 @@ pipeline {
         EMAIL_TO = 'ankushpatil488@gmail.com'
         DOCKERHUB_USER = 'ankushpatil0125'
         EC2_DOCKER_IMAGE_NAME_REACT = 'ec2_frontend_image:latest'
-        EC2_DOCKER_IMAGE_NAME_SPRING = 'ec2_backend_image:latest'
-        EC2_DOCKER_IMAGE_NAME_FLASK  = 'ec2_flask_image:latest'
+        // EC2_DOCKER_IMAGE_NAME_SPRING = 'ec2_backend_image:latest'
+        // EC2_DOCKER_IMAGE_NAME_FLASK  = 'ec2_flask_image:latest'
     }
 
     stages {
@@ -36,8 +36,8 @@ pipeline {
             steps {
                 script {
                     sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_REACT} -f ReactFrontend/Dockerfile ."
-                    sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_SPRING} -f SpringBackend/Dockerfile ."	
-                    sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_FLASK} -f FlaskBackend/Dockerfile ."
+                    // sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_SPRING} -f SpringBackend/Dockerfile ."	
+                    // sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_FLASK} -f FlaskBackend/Dockerfile ."
                 }
             }
         }
@@ -46,8 +46,8 @@ pipeline {
                 script{
                     docker.withRegistry('', 'DockerHubCred') {
                     sh 'docker push ankushpatil0125/ec2_frontend_image'
-                    sh 'docker push ankushpatil0125/ec2_backend_image'
-                    sh 'docker push ankushpatil0125/ec2_flask_image'
+                    // sh 'docker push ankushpatil0125/ec2_backend_image'
+                    // sh 'docker push ankushpatil0125/ec2_flask_image'
                     }
                  }
             }
@@ -57,7 +57,7 @@ pipeline {
                 script {
                     ansiblePlaybook(
                     playbook: 'deploy-ec2.yml',
-                        inventory: 'ec2-inventory.txt',
+                        inventory: 'ec2-inventory.ini',
                         extras: '-e ansible_user=ubuntu -e ansible_python_interpreter=/usr/bin/python3',
                         credentialsId: '98a007f4-c8f5-49ed-b520-c2ec2524f97d',
                         sshExtraArgs: '-i /home/ankushpatil488/Downloads/SPE_WebServer_Key.pem'
