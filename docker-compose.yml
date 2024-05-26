@@ -57,7 +57,7 @@ services:
   #     retries: 3
 
   bookreviewfrontend:
-    image: ankushpatil0125/frontend_image
+    image: ankushpatil0125/ec2_frontend_image
     container_name: frontend_container
     ports:
       - "3000:3000"
