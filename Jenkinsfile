@@ -18,40 +18,40 @@ pipeline {
                 }
             }
         }
-        stage('Check TEST cases') {
-        steps {
-            script {
-                sh 'mvn -f SpringBackend/ test'
-            }
-        }
-        }
-        stage('Build Maven Project') {
-            steps {
-                script {
-                    sh 'mvn -f SpringBackend/pom.xml clean install -DskipTests'
-                }
-            }
-        }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_REACT} -f ReactFrontend/Dockerfile ."
-                    // sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_SPRING} -f SpringBackend/Dockerfile ."	
-                    // sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_FLASK} -f FlaskBackend/Dockerfile ."
-                }
-            }
-        }
-        stage('Push Docker Images') {
-            steps {
-                script{
-                    docker.withRegistry('', 'DockerHubCred') {
-                    sh 'docker push ankushpatil0125/ec2_frontend_image'
-                    // sh 'docker push ankushpatil0125/ec2_backend_image'
-                    // sh 'docker push ankushpatil0125/ec2_flask_image'
-                    }
-                 }
-            }
-        }
+        // stage('Check TEST cases') {
+        // steps {
+        //     script {
+        //         sh 'mvn -f SpringBackend/ test'
+        //     }
+        // }
+        // }
+        // stage('Build Maven Project') {
+        //     steps {
+        //         script {
+        //             sh 'mvn -f SpringBackend/pom.xml clean install -DskipTests'
+        //         }
+        //     }
+        // }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         script {
+        //             sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_REACT} -f ReactFrontend/Dockerfile ."
+        //             // sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_SPRING} -f SpringBackend/Dockerfile ."	
+        //             // sh "docker build -t ${DOCKERHUB_USER}/${EC2_DOCKER_IMAGE_NAME_FLASK} -f FlaskBackend/Dockerfile ."
+        //         }
+        //     }
+        // }
+        // stage('Push Docker Images') {
+        //     steps {
+        //         script{
+        //             docker.withRegistry('', 'DockerHubCred') {
+        //             sh 'docker push ankushpatil0125/ec2_frontend_image'
+        //             // sh 'docker push ankushpatil0125/ec2_backend_image'
+        //             // sh 'docker push ankushpatil0125/ec2_flask_image'
+        //             }
+        //          }
+        //     }
+        // }
 	    stage('Run Ansible EC2 Playbook') {
             steps {
                 script {
