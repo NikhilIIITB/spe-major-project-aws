@@ -1,63 +1,63 @@
 version: '3'
 
 services:
-  userservice:
-    image: ankushpatil0125/ec2_backend_image
-    container_name: backend_container
-    ports:
-      - "9090:9090"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://bookreview_db_container:3306/bookReviewDB?createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      # - LOGGING_LOGSTASH_HOST=logstash
-      # - LOGGING_LOGSTASH_PORT=5001
-    networks:
-      - book-review-network 
-    depends_on:
-      - bookreview_db
-    volumes:
-      - /home:/logs
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # userservice:
+  #   image: ankushpatil0125/ec2_backend_image
+  #   container_name: backend_container
+  #   ports:
+  #     - "9090:9090"
+  #   environment:
+  #     - SPRING_DATASOURCE_URL=jdbc:mysql://bookreview_db_container:3306/bookReviewDB?createDatabaseIfNotExist=true
+  #     - SPRING_DATASOURCE_USERNAME=root
+  #     - SPRING_DATASOURCE_PASSWORD=root
+  #     # - LOGGING_LOGSTASH_HOST=logstash
+  #     # - LOGGING_LOGSTASH_PORT=5001
+  #   networks:
+  #     - book-review-network 
+  #   depends_on:
+  #     - bookreview_db
+  #   volumes:
+  #     - /home:/logs
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
 
 
-  bookreview_db:
-    image: mysql:8
-    container_name: bookreview_db_container
-    ports:
-      - "3308:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=bookReviewDB
-    volumes:
-      - bookreview_db:/var/lib/mysql
-    networks:
-      - book-review-network 
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # bookreview_db:
+  #   image: mysql:8
+  #   container_name: bookreview_db_container
+  #   ports:
+  #     - "3308:3306"
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=bookReviewDB
+  #   volumes:
+  #     - bookreview_db:/var/lib/mysql
+  #   networks:
+  #     - book-review-network 
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
       
-  flaskBackend:
-    image: ankushpatil0125/ec2_flask_image
-    container_name: flask_container
-    ports:
-      - "5002:5002"
-    networks:
-      - book-review-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # flaskBackend:
+  #   image: ankushpatil0125/ec2_flask_image
+  #   container_name: flask_container
+  #   ports:
+  #     - "5002:5002"
+  #   networks:
+  #     - book-review-network
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
 
   bookreviewfrontend:
-    image: ankushpatil0125/ec2_frontend_image
+    image: ankushpatil0125/frontend_image
     container_name: frontend_container
     ports:
       - "3000:3000"
