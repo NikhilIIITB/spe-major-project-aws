@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GITHUB_REPO_URL = 'https://github.com/ankushpatil0125/SPE-Major-Project.git'
+        GITHUB_REPO_URL = 'https://github.com/NikhilIIITB/spe-major-project-aws.git'
         EMAIL_TO = 'ankushpatil488@gmail.com'
         DOCKERHUB_USER = 'ankushpatil0125'
         EC2_DOCKER_IMAGE_NAME_REACT = 'ec2_frontend_image:latest'
