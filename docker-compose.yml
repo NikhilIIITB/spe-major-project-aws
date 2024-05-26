@@ -1,0 +1,130 @@
+version: '3'
+
+services:
+  userservice:
+    image: ankushpatil0125/ec2_backend_image
+    container_name: backend_container
+    ports:
+      - "9090:9090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://bookreview_db_container:3306/bookReviewDB?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      # - LOGGING_LOGSTASH_HOST=logstash
+      # - LOGGING_LOGSTASH_PORT=5001
+    networks:
+      - book-review-network 
+    depends_on:
+      - bookreview_db
+    volumes:
+      - /home:/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  bookreview_db:
+    image: mysql:8
+    container_name: bookreview_db_container
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bookReviewDB
+    volumes:
+      - bookreview_db:/var/lib/mysql
+    networks:
+      - book-review-network 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      
+  flaskBackend:
+    image: ankushpatil0125/ec2_flask_image
+    container_name: flask_container
+    ports:
+      - "5002:5002"
+    networks:
+      - book-review-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  bookreviewfrontend:
+    image: ankushpatil0125/ec2_frontend_image
+    container_name: frontend_container
+    ports:
+      - "3000:3000"
+    networks:
+      - book-review-network 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
+  #   container_name: elasticsearch
+  #   restart: always
+  #   environment:
+  #     - bootstrap.memory_lock=true
+  #     - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #     - xpack.security.enabled=false
+  #     - discovery.type=single-node
+  #     - network.host=0.0.0.0
+  #     - http.port=9200
+  #   ports:
+  #     - "9200:9200"
+  #   networks:
+  #     - book-review-network
+  #   volumes:
+  #     - elastic_data:/usr/share/elasticsearch/data
+  #     - /home/ankushpatil488/IIITB/SEM2/SPE/2ndHalf/Final Project/SPE-Major-Project/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  #     - /home/ankushpatil488/IIITB/SEM2/SPE/2ndHalf/Final Project/SPE-Major-Project/elasticsearch:/var/log/elasticsearch
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.3.3
+  #   container_name: kibana
+  #   restart: always
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   ports:
+  #     - "5601:5601"
+  #   networks:
+  #     - book-review-network
+  #   depends_on:
+  #     - elasticsearch
+
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.3.3
+  #   container_name: logstash
+  #   restart: always
+  #   volumes:
+  #     - /home/ankushpatil488/IIITB/SEM2/SPE/2ndHalf/Final Project/SPE-Major-Project/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+  #     - /home/ankushpatil488/IIITB/SEM2/SPE/2ndHalf/Final Project/SPE-Major-Project/logstash/pipeline:/usr/share/logstash/pipeline:ro
+  #   environment:
+  #     - LS_JAVA_OPTS=-Xmx512m -Xms512m
+  #   ports:
+  #     - "5001:5001/tcp"
+  #     - "5001:5001/udp"
+  #     - "9600:9600"
+  #   networks:
+  #     - book-review-network
+  #   depends_on:
+  #     - elasticsearch
+
+networks:
+  book-review-network:
+    driver: bridge
+
+volumes:
+  bookreview_db:
+  # elastic_data:
+  #   driver: local
