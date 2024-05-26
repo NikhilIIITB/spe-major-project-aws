@@ -2,13 +2,13 @@
 - name: Deploy application to EC2
   hosts: ec2
   remote_user: ubuntu
-  become: yes
+  # become: yes
   vars:
     project_dir: /home/ubuntu/
     ansible_python_interpreter: /usr/bin/python3  # Ensure Ansible uses the correct Python interpreter
   tasks:
-    - name: Gathering Facts
-      setup:
+    # - name: Gathering Facts
+    #   setup:
 
     - name: Ensure Docker service is running
       systemd:
