@@ -60,7 +60,7 @@ pipeline {
 	                    //  inventory: 'ec2-inventory.ini',
 	                        extras: '-e ansible_user=ubuntu -e ansible_python_interpreter=/usr/bin/python3.10',
 	                        credentialsId: '98a007f4-c8f5-49ed-b520-c2ec2524f97d',
-	                        sshExtraArgs: '-i /home/ankushpatil488/Downloads/SPE_WebServer_Key.pem'
+	                        // sshExtraArgs: '-i /home/ankushpatil488/Downloads/SPE_WebServer_Key.pem'
 	                    )
 			    sh 'ansible-playbook -i ec2-inventory.ini deploy-ec2.yml'
                 }
