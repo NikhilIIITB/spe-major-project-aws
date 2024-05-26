@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     ansiblePlaybook(
-                    playbook: 'deploy-ec2.yml',
+                    	playbook: 'deploy-ec2.yml',
                         inventory: 'ec2-inventory.ini',
                         extras: '-e ansible_user=ubuntu -e ansible_python_interpreter=/usr/bin/python3',
                         credentialsId: '98a007f4-c8f5-49ed-b520-c2ec2524f97d',
